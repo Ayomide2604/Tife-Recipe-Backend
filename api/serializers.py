@@ -11,6 +11,12 @@ class SimpleRecipeSerializer(serializers.ModelSerializer):
                   "categories", "created_at", "updated_at"]
 
 
+class SimpleCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "title",]
+
+
 class CategorySerializer(serializers.ModelSerializer):
     recipes = SimpleRecipeSerializer(many=True, required=False)
     image = serializers.SerializerMethodField()
@@ -30,7 +36,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True, required=False)
+    categories = SimpleCategorySerializer(many=True, required=False)
     image = serializers.SerializerMethodField()
 
     def get_image(self, obj):
