@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Category, Recipe
+from backend.settings import MEDIA_URL
 
 
 class SimpleRecipeSerializer(serializers.ModelSerializer):
@@ -10,7 +11,14 @@ class SimpleRecipeSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
     recipes = SimpleRecipeSerializer(many=True, required=False)
+
+    def get_image(self, obj):
+        if obj.image:
+            return f"{MEDIA_URL}{obj.image}"
+
+        return None
 
     class Meta:
         model = Category
@@ -19,6 +27,13 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, required=False)
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if obj.image:
+            return f"{MEDIA_URL}{obj.image}"
+
+        return None
 
     class Meta:
         model = Recipe
