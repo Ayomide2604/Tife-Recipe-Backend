@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "corsheaders",
     'djoser',
     'rest_framework_simplejwt',
+    "cloudinary",
+    "cloudinary_storage",
 
 ]
 
@@ -80,7 +82,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 
 if os.getenv('DATABASE_URL'):
     DATABASES = {
@@ -146,13 +147,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://192.168.0.141:5173",
-    "https://tife-recipe-frontend.onrender.com",
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:5173",
+#     "https://tife-recipe-frontend.onrender.com",
+#     "https://tife-recipe-backend.onrender.com",
 
-]
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 REST_FRAMEWORK = {
@@ -174,3 +177,18 @@ SIMPLE_JWT = {
 
 
 }
+
+
+if os.getenv('CLOUDINARY_CLOUD_NAME'):
+
+    # Configure Cloudinary Storage
+    CLOUDINARY_STORAGE = {
+        "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+        "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+        "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+    }
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+    MEDIA_URL = "https://res.cloudinary.com/{}/".format(
+        os.getenv("CLOUDINARY_CLOUD_NAME"))
+else:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.StaticFilesStorage"
