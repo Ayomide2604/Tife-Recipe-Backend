@@ -191,4 +191,4 @@ if os.getenv('CLOUDINARY_CLOUD_NAME'):
     MEDIA_URL = "https://res.cloudinary.com/{}/".format(
         os.getenv("CLOUDINARY_CLOUD_NAME"))
 else:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.StaticFilesStorage"
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
